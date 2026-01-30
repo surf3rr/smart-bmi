@@ -86,7 +86,7 @@ pip install flask opencv-python face-recognition numpy cmake dlib
 cd smart-attendance-system
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r requirements.txt  
 
 # Create data directory (will be auto-created)
 mkdir data
