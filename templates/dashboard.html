@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            color: #667eea;
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card-title {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #764ba2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            color: #667eea;
+            font-weight: 600;
+            border-bottom: 2px solid #667eea;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-present {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .user-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .user-rfid {
+            font-size: 0.85em;
+            color: #999;
+            font-family: monospace;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .last-updated {
+            text-align: right;
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            table {
+                font-size: 0.85em;
+            }
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Smart Attendance Dashboard</h1>
+            <p class="subtitle">Real-time RFID + Face Recognition System</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">👥 Total Users</div>
+                <div class="stat-value" id="totalUsers">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">📅 Today's Attendance</div>
+                <div class="stat-value" id="todayAttendance">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">📋 Total Records</div>
+                <div class="stat-value" id="totalAttendance">-</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2 class="card-title">
+                    <span><span class="emoji">📝</span>Recent Attendance</span>
+                    <button class="refresh-btn" onclick="loadData()">🔄 Refresh</button>
+                </h2>
+                <div id="recentAttendance" class="loading">Loading...</div>
+                <div class="last-updated" id="lastUpdated"></div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">
+                    <span><span class="emoji">👥</span>Registered Users</span>
+                </h2>
+                <div id="userList" class="user-list loading">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let autoRefreshInterval;
+
+        async function loadData() {
+            try {
+                // Load statistics
+                const statsResponse = await fetch('/api/stats');
+                const stats = await statsResponse.json();
+
+                document.getElementById('totalUsers').textContent = stats.total_users;
+                document.getElementById('todayAttendance').textContent = stats.today_attendance;
+                document.getElementById('totalAttendance').textContent = stats.total_attendance;
+
+                // Load recent attendance
+                displayRecentAttendance(stats.recent_records);
+
+                // Load users
+                const usersResponse = await fetch('/api/users');
+                const users = await usersResponse.json();
+                displayUsers(users);
+
+                // Update last updated time
+                const now = new Date();
+                document.getElementById('lastUpdated').textContent = 
+                    `Last updated: ${now.toLocaleTimeString()}`;
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('recentAttendance').innerHTML = 
+                    '<div class="empty-state">❌ Error loading data</div>';
+            }
+        }
+
+        function displayRecentAttendance(records) {
+            const container = document.getElementById('recentAttendance');
+
+            if (!records || records.length === 0) {
+                container.innerHTML = '<div class="empty-state">📭 No attendance records yet</div>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Name</th><th>Time</th><th>Status</th></tr></thead><tbody>';
+
+            records.forEach(record => {
+                html += `
+                    <tr>
+                        <td><strong>${record.name}</strong><br><small>${record.rfid}</small></td>
+                        <td>${record.time}<br><small>${record.date}</small></td>
+                        <td><span class="status-badge status-present">${record.status}</span></td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function displayUsers(users) {
+            const container = document.getElementById('userList');
+
+            if (!users || users.length === 0) {
+                container.innerHTML = '<div class="empty-state">👤 No users registered yet</div>';
+                return;
+            }
+
+            let html = '';
+
+            users.forEach(user => {
+                const initial = user.name.charAt(0).toUpperCase();
+                html += `
+                    <div class="user-item">
+                        <div class="user-info">
+                            <div class="user-avatar">${initial}</div>
+                            <div class="user-details">
+                                <div class="user-name">${user.name}</div>
+                                <div class="user-rfid">🔑 ${user.rfid}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Load data on page load
+        loadData();
+
+        // Auto-refresh every 5 seconds
+        autoRefreshInterval = setInterval(loadData, 5000);
+
+        // Stop auto-refresh when page is hidden
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                clearInterval(autoRefreshInterval);
+            } else {
+                loadData();
+                autoRefreshInterval = setInterval(loadData, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
