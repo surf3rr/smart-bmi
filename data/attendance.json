@@ -54,5 +54,203 @@
     "date": "2026-01-30",
     "time": "19:18:44",
     "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-01 15:53:46",
+    "date": "2026-02-01",
+    "time": "15:53:46",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-01 15:53:58",
+    "date": "2026-02-01",
+    "time": "15:53:58",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-01 15:54:20",
+    "date": "2026-02-01",
+    "time": "15:54:20",
+    "status": "Present"
+  },
+  {
+    "rfid": "79089B94",
+    "name": "raghav",
+    "timestamp": "2026-02-01 15:55:05",
+    "date": "2026-02-01",
+    "time": "15:55:05",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-01 15:55:31",
+    "date": "2026-02-01",
+    "time": "15:55:31",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-01 16:00:07",
+    "date": "2026-02-01",
+    "time": "16:00:07",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-06 17:12:28",
+    "date": "2026-02-06",
+    "time": "17:12:28",
+    "status": "Present",
+    "face_distance": 0.221,
+    "verified": true
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-06 17:15:35",
+    "date": "2026-02-06",
+    "time": "17:15:35",
+    "status": "Present"
+  },
+  {
+    "rfid": "79089B94",
+    "name": "raghav",
+    "timestamp": "2026-02-06 17:16:39",
+    "date": "2026-02-06",
+    "time": "17:16:39",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:14:48",
+    "date": "2026-02-22",
+    "time": "18:14:48",
+    "status": "Present"
+  },
+  {
+    "rfid": "79089B94",
+    "name": "raghav",
+    "timestamp": "2026-02-22 18:15:09",
+    "date": "2026-02-22",
+    "time": "18:15:09",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:16:39",
+    "date": "2026-02-22",
+    "time": "18:16:39",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:30:40",
+    "date": "2026-02-22",
+    "time": "18:30:40",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:31:07",
+    "date": "2026-02-22",
+    "time": "18:31:07",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:35:23",
+    "date": "2026-02-22",
+    "time": "18:35:23",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:35:49",
+    "date": "2026-02-22",
+    "time": "18:35:49",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:40:32",
+    "date": "2026-02-22",
+    "time": "18:40:32",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:44:05",
+    "date": "2026-02-22",
+    "time": "18:44:05",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 18:59:14",
+    "date": "2026-02-22",
+    "time": "18:59:14",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 19:00:29",
+    "date": "2026-02-22",
+    "time": "19:00:29",
+    "status": "Present"
+  },
+  {
+    "rfid": "4097CC61",
+    "name": "utkarsh",
+    "timestamp": "2026-02-22 19:08:25",
+    "date": "2026-02-22",
+    "time": "19:08:25",
+    "status": "Present",
+    "height": 178.2,
+    "weight": 40.0,
+    "bmi": 12.6,
+    "bmi_category": "Underweight"
+  },
+  {
+    "rfid": "79089B94",
+    "name": "raghav",
+    "timestamp": "2026-02-22 19:08:54",
+    "date": "2026-02-22",
+    "time": "19:08:54",
+    "status": "Present",
+    "height": 201.5,
+    "weight": 63.0,
+    "bmi": 15.5,
+    "bmi_category": "Underweight"
+  },
+  {
+    "rfid": "79089B94",
+    "name": "raghav",
+    "timestamp": "2026-02-22 19:10:17",
+    "date": "2026-02-22",
+    "time": "19:10:17",
+    "status": "Present",
+    "height": 202.9,
+    "weight": 63.0,
+    "bmi": 15.3,
+    "bmi_category": "Underweight"
   }
 ]

@@ -4,77 +4,303 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Attendance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #5b5ef4;
+            --primary-dark: #4345c7;
+            --accent: #f59e0b;
+            --accent-light: #fef3c7;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --info: #3b82f6;
+            --info-light: #dbeafe;
+            --bg: #0f0f1a;
+            --surface: #1a1a2e;
+            --surface2: #16213e;
+            --border: rgba(255,255,255,0.08);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --radius: 16px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 20% 20%, rgba(91,94,244,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(245,158,11,0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1440px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
+        /* ── HEADER ── */
         header {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 36px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
         }
 
-        h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        .header-left h1 {
+            font-size: 1.9em;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.5px;
         }
 
-        .subtitle {
-            color: #666;
-            font-size: 1.1em;
+        .header-left h1 span {
+            color: var(--primary);
         }
 
+        .header-left p {
+            color: var(--text-muted);
+            font-size: 0.88em;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16,185,129,0.12);
+            border: 1px solid rgba(16,185,129,0.3);
+            color: var(--success);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.82em;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        /* ── STATS ── */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, border-color 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+        }
+
+        .stat-card:nth-child(1)::after { background: var(--primary); }
+        .stat-card:nth-child(2)::after { background: var(--success); }
+        .stat-card:nth-child(3)::after { background: var(--info); }
+        .stat-card:nth-child(4)::after { background: var(--accent); }
+
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
+            border-color: rgba(91,94,244,0.3);
+        }
+
+        .stat-icon {
+            font-size: 1.4em;
+            margin-bottom: 12px;
         }
 
         .stat-label {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-size: 0.76em;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+            margin-bottom: 8px;
         }
 
         .stat-value {
-            color: #667eea;
-            font-size: 3em;
-            font-weight: bold;
+            font-size: 2.6em;
+            font-weight: 700;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1;
         }
 
+        /* ── BMI ALERT ── */
+        .bmi-alert {
+            background: var(--surface);
+            border: 1px solid rgba(245,158,11,0.4);
+            border-left: 4px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow), 0 0 40px rgba(245,158,11,0.05);
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .bmi-alert.active { display: block; }
+
+        .bmi-alert-title {
+            color: var(--accent);
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bmi-pending-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .bmi-pending-card {
+            background: rgba(245,158,11,0.06);
+            border: 1px solid rgba(245,158,11,0.25);
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 300px;
+            flex: 1;
+            max-width: 420px;
+        }
+
+        .bmi-pending-card h3 {
+            color: #fff;
+            font-size: 1em;
+            margin-bottom: 4px;
+        }
+
+        .bmi-pending-card .meta {
+            color: var(--text-muted);
+            font-size: 0.82em;
+            margin-bottom: 16px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .bmi-pending-card .meta strong {
+            color: var(--accent);
+        }
+
+        .weight-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .weight-input {
+            background: var(--bg);
+            border: 1.5px solid rgba(245,158,11,0.4);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.95em;
+            font-family: 'JetBrains Mono', monospace;
+            color: #fff;
+            width: 140px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .weight-input:focus { border-color: var(--primary); }
+        .weight-input.error { border-color: var(--danger); }
+        .weight-input::placeholder { color: var(--text-muted); font-size: 0.85em; }
+
+        .calc-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: background 0.2s, transform 0.1s;
+            white-space: nowrap;
+        }
+
+        .calc-btn:hover { background: var(--primary-dark); }
+        .calc-btn:active { transform: scale(0.97); }
+        .calc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .bmi-result-box {
+            margin-top: 14px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.88em;
+            font-weight: 600;
+            display: none;
+        }
+
+        .bmi-result-box.show { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+
+        .bmi-result-box.normal   { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+        .bmi-result-box.underweight { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+        .bmi-result-box.overweight  { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+        .bmi-result-box.obese       { background: rgba(239,68,68,0.15);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+        .bmi-result-box.error-box   { background: rgba(239,68,68,0.12);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+
+        /* ── MAIN GRID ── */
         .content-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -82,309 +308,531 @@
         }
 
         .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
         }
 
         .card-title {
-            color: #667eea;
-            font-size: 1.5em;
+            font-size: 1em;
+            font-weight: 700;
+            color: #fff;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 8px;
         }
 
+        .card-title .icon { font-size: 1.1em; }
+
         .refresh-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 8px 15px;
+            background: rgba(91,94,244,0.15);
+            color: var(--primary);
+            border: 1px solid rgba(91,94,244,0.3);
+            padding: 7px 14px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.8em;
-            transition: background 0.3s ease;
+            font-size: 0.78em;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.2s;
         }
 
         .refresh-btn:hover {
-            background: #764ba2;
+            background: var(--primary);
+            color: #fff;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* ── TABLE ── */
+        table { width: 100%; border-collapse: collapse; }
+
+        thead tr {
+            border-bottom: 1px solid var(--border);
         }
 
         th {
-            background: #f8f9fa;
-            padding: 15px;
+            padding: 10px 12px;
             text-align: left;
-            color: #667eea;
-            font-weight: 600;
-            border-bottom: 2px solid #667eea;
+            font-size: 0.72em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
         }
 
         td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            color: #333;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875em;
+            color: var(--text);
+            vertical-align: middle;
         }
 
-        tr:hover {
-            background: #f8f9fa;
+        tr:last-child td { border-bottom: none; }
+
+        tbody tr {
+            transition: background 0.15s;
         }
 
-        .status-badge {
+        tbody tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .name-cell strong { color: #fff; display: block; font-size: 0.95em; }
+        .name-cell .rfid-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72em;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .time-cell { font-family: 'JetBrains Mono', monospace; font-size: 0.82em; }
+        .time-cell .date { color: var(--text-muted); font-size: 0.85em; margin-top: 2px; }
+
+        /* ── BADGES ── */
+        .badge {
             display: inline-block;
-            padding: 5px 15px;
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
+            font-size: 0.75em;
+            font-weight: 700;
         }
 
-        .status-present {
-            background: #d4edda;
-            color: #155724;
+        .badge-present  { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+        .badge-bmionly  { background: rgba(59,130,246,0.15);  color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+
+        .bmi-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
         }
 
+        .bmi-normal     { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+        .bmi-underweight{ background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+        .bmi-overweight { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+        .bmi-obese      { background: rgba(239,68,68,0.15);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+        .bmi-pending    { background: rgba(148,163,184,0.1); color: var(--text-muted); border: 1px solid rgba(148,163,184,0.2); }
+
+        /* ── USER LIST ── */
         .user-list {
-            max-height: 400px;
+            max-height: 420px;
             overflow-y: auto;
         }
 
+        .user-list::-webkit-scrollbar { width: 4px; }
+        .user-list::-webkit-scrollbar-track { background: transparent; }
+        .user-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
         .user-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        .user-item:last-child {
-            border-bottom: none;
-        }
+        .user-item:last-child { border-bottom: none; }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-right: 15px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1em;
+            flex-shrink: 0;
         }
 
-        .user-details {
-            flex-grow: 1;
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
+        .user-name { font-weight: 600; color: #fff; font-size: 0.9em; }
         .user-rfid {
-            font-size: 0.85em;
-            color: #999;
-            font-family: monospace;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            color: var(--text-muted);
+            margin-top: 3px;
         }
 
         .empty-state {
             text-align: center;
-            padding: 40px;
-            color: #999;
+            padding: 48px 24px;
+            color: var(--text-muted);
+            font-size: 0.9em;
         }
 
         .loading {
             text-align: center;
-            padding: 20px;
-            color: #667eea;
+            padding: 32px;
+            color: var(--text-muted);
+            font-size: 0.9em;
         }
 
         .last-updated {
+            color: var(--text-muted);
+            font-size: 0.75em;
+            margin-top: 12px;
             text-align: right;
-            color: #999;
-            font-size: 0.85em;
-            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        @media (max-width: 768px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            table {
-                font-size: 0.85em;
-            }
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .content-grid { grid-template-columns: 1fr; }
+            header { flex-direction: column; align-items: flex-start; gap: 16px; }
         }
 
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 10px;
+        @media (max-width: 500px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            body { padding: 12px; }
+            header { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📊 Smart Attendance Dashboard</h1>
-            <p class="subtitle">Real-time RFID + Face Recognition System</p>
-        </header>
+<div class="container">
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">👥 Total Users</div>
-                <div class="stat-value" id="totalUsers">-</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">📅 Today's Attendance</div>
-                <div class="stat-value" id="todayAttendance">-</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">📋 Total Records</div>
-                <div class="stat-value" id="totalAttendance">-</div>
-            </div>
+    <!-- HEADER -->
+    <header>
+        <div class="header-left">
+            <h1>Smart <span>Attendance</span> & BMI</h1>
+            <p>RFID + Face Recognition + HC-SR04 Height Sensor</p>
         </div>
+        <div class="live-badge">
+            <div class="live-dot"></div>
+            LIVE
+        </div>
+    </header>
 
-        <div class="content-grid">
-            <div class="card">
-                <h2 class="card-title">
-                    <span><span class="emoji">📝</span>Recent Attendance</span>
-                    <button class="refresh-btn" onclick="loadData()">🔄 Refresh</button>
-                </h2>
-                <div id="recentAttendance" class="loading">Loading...</div>
-                <div class="last-updated" id="lastUpdated"></div>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">
-                    <span><span class="emoji">👥</span>Registered Users</span>
-                </h2>
-                <div id="userList" class="user-list loading">Loading...</div>
-            </div>
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="totalUsers">—</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-label">Today's Attendance</div>
+            <div class="stat-value" id="todayAttendance">—</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-label">Total Records</div>
+            <div class="stat-value" id="totalAttendance">—</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⚖️</div>
+            <div class="stat-label">BMI Recorded Today</div>
+            <div class="stat-value" id="bmiCount">—</div>
         </div>
     </div>
 
-    <script>
-        let autoRefreshInterval;
+    <!-- BMI WEIGHT ENTRY ALERT -->
+    <div class="bmi-alert" id="bmiAlert">
+        <div class="bmi-alert-title">
+            ⚖️ Weight Entry Required — Height measured by sensor
+        </div>
+        <div class="bmi-pending-list" id="bmiPendingList"></div>
+    </div>
 
-        async function loadData() {
-            try {
-                // Load statistics
-                const statsResponse = await fetch('/api/stats');
-                const stats = await statsResponse.json();
+    <!-- MAIN CONTENT -->
+    <div class="content-grid">
 
-                document.getElementById('totalUsers').textContent = stats.total_users;
-                document.getElementById('todayAttendance').textContent = stats.today_attendance;
-                document.getElementById('totalAttendance').textContent = stats.total_attendance;
+        <div class="card">
+            <div class="card-title">
+                <span><span class="icon">📝</span> Recent Attendance</span>
+                <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+            </div>
+            <div id="recentAttendance" class="loading">Loading...</div>
+            <div class="last-updated" id="lastUpdated"></div>
+        </div>
 
-                // Load recent attendance
-                displayRecentAttendance(stats.recent_records);
+        <div class="card">
+            <div class="card-title">
+                <span><span class="icon">👥</span> Registered Users</span>
+            </div>
+            <div id="userList" class="user-list loading">Loading...</div>
+        </div>
 
-                // Load users
-                const usersResponse = await fetch('/api/users');
-                const users = await usersResponse.json();
-                displayUsers(users);
+    </div>
+</div>
 
-                // Update last updated time
-                const now = new Date();
-                document.getElementById('lastUpdated').textContent = 
-                    `Last updated: ${now.toLocaleTimeString()}`;
+<script>
+    let autoRefreshInterval;
 
-            } catch (error) {
-                console.error('Error loading data:', error);
-                document.getElementById('recentAttendance').innerHTML = 
-                    '<div class="empty-state">❌ Error loading data</div>';
-            }
+    // ── MAIN DATA LOADER ──────────────────────────────────────
+    async function loadData() {
+        try {
+            // Stats
+            const statsRes = await fetch('/api/stats');
+            const stats = await statsRes.json();
+
+            document.getElementById('totalUsers').textContent      = stats.total_users;
+            document.getElementById('todayAttendance').textContent = stats.today_attendance;
+            document.getElementById('totalAttendance').textContent = stats.total_attendance;
+
+            // Count records with BMI today
+            const bmiToday = (stats.recent_records || []).filter(r => r.bmi !== null && r.bmi !== undefined).length;
+            document.getElementById('bmiCount').textContent = bmiToday;
+
+            displayRecentAttendance(stats.recent_records);
+
+            // Users
+            const usersRes = await fetch('/api/users');
+            const users = await usersRes.json();
+            displayUsers(users);
+
+            // Pending BMI entries
+            const pendingRes = await fetch('/api/pending_bmi');
+            const pending = await pendingRes.json();
+            displayPendingBMI(pending);
+
+            document.getElementById('lastUpdated').textContent =
+                'Last updated: ' + new Date().toLocaleTimeString();
+
+        } catch (err) {
+            console.error('loadData error:', err);
+            document.getElementById('recentAttendance').innerHTML =
+                '<div class="empty-state">❌ Cannot reach server</div>';
+        }
+    }
+
+    // ── ATTENDANCE TABLE ──────────────────────────────────────
+    function displayRecentAttendance(records) {
+        const el = document.getElementById('recentAttendance');
+
+        if (!records || records.length === 0) {
+            el.innerHTML = '<div class="empty-state">📭 No attendance records yet</div>';
+            return;
         }
 
-        function displayRecentAttendance(records) {
-            const container = document.getElementById('recentAttendance');
+        let html = `<table>
+            <thead><tr>
+                <th>Name</th>
+                <th>Time</th>
+                <th>Height</th>
+                <th>BMI</th>
+                <th>Status</th>
+            </tr></thead><tbody>`;
 
-            if (!records || records.length === 0) {
-                container.innerHTML = '<div class="empty-state">📭 No attendance records yet</div>';
-                return;
-            }
+        records.forEach(r => {
+            // Height cell
+            const heightTxt = r.height ? `${r.height} cm` : '<span style="color:#475569">—</span>';
 
-            let html = '<table><thead><tr><th>Name</th><th>Time</th><th>Status</th></tr></thead><tbody>';
-
-            records.forEach(record => {
-                html += `
-                    <tr>
-                        <td><strong>${record.name}</strong><br><small>${record.rfid}</small></td>
-                        <td>${record.time}<br><small>${record.date}</small></td>
-                        <td><span class="status-badge status-present">${record.status}</span></td>
-                    </tr>
-                `;
-            });
-
-            html += '</tbody></table>';
-            container.innerHTML = html;
-        }
-
-        function displayUsers(users) {
-            const container = document.getElementById('userList');
-
-            if (!users || users.length === 0) {
-                container.innerHTML = '<div class="empty-state">👤 No users registered yet</div>';
-                return;
-            }
-
-            let html = '';
-
-            users.forEach(user => {
-                const initial = user.name.charAt(0).toUpperCase();
-                html += `
-                    <div class="user-item">
-                        <div class="user-info">
-                            <div class="user-avatar">${initial}</div>
-                            <div class="user-details">
-                                <div class="user-name">${user.name}</div>
-                                <div class="user-rfid">🔑 ${user.rfid}</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        // Load data on page load
-        loadData();
-
-        // Auto-refresh every 5 seconds
-        autoRefreshInterval = setInterval(loadData, 5000);
-
-        // Stop auto-refresh when page is hidden
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                clearInterval(autoRefreshInterval);
+            // BMI cell
+            let bmiTxt;
+            if (r.bmi !== null && r.bmi !== undefined) {
+                const cls = {
+                    'Normal':      'bmi-normal',
+                    'Underweight': 'bmi-underweight',
+                    'Overweight':  'bmi-overweight',
+                    'Obese':       'bmi-obese'
+                }[r.bmi_category] || '';
+                bmiTxt = `<span class="bmi-badge ${cls}">${r.bmi} — ${r.bmi_category}</span>`;
+            } else if (r.height) {
+                bmiTxt = `<span class="bmi-badge bmi-pending">⏳ Weight needed</span>`;
             } else {
-                loadData();
-                autoRefreshInterval = setInterval(loadData, 5000);
+                bmiTxt = '<span style="color:#475569">—</span>';
+            }
+
+            // Status badge
+            const statusCls = r.status === 'Present' ? 'badge-present' : 'badge-bmionly';
+
+            html += `<tr>
+                <td class="name-cell">
+                    <strong>${r.name}</strong>
+                    <div class="rfid-code">${r.rfid}</div>
+                </td>
+                <td class="time-cell">
+                    ${r.time}
+                    <div class="date">${r.date}</div>
+                </td>
+                <td>${heightTxt}</td>
+                <td>${bmiTxt}</td>
+                <td><span class="badge ${statusCls}">${r.status}</span></td>
+            </tr>`;
+        });
+
+        html += '</tbody></table>';
+        el.innerHTML = html;
+    }
+
+    // ── USER LIST ─────────────────────────────────────────────
+    function displayUsers(users) {
+        const el = document.getElementById('userList');
+
+        if (!users || users.length === 0) {
+            el.innerHTML = '<div class="empty-state">👤 No users registered yet</div>';
+            return;
+        }
+
+        let html = '';
+        users.forEach(u => {
+            const initial = u.name.charAt(0).toUpperCase();
+            html += `<div class="user-item">
+                <div class="avatar">${initial}</div>
+                <div>
+                    <div class="user-name">${u.name}</div>
+                    <div class="user-rfid">🔑 ${u.rfid}</div>
+                </div>
+            </div>`;
+        });
+
+        el.innerHTML = html;
+    }
+
+    // ── PENDING BMI CARDS ─────────────────────────────────────
+    function displayPendingBMI(pending) {
+        const alertEl = document.getElementById('bmiAlert');
+        const listEl  = document.getElementById('bmiPendingList');
+
+        if (!pending || pending.length === 0) {
+            alertEl.classList.remove('active');
+            listEl.innerHTML = '';
+            return;
+        }
+
+        alertEl.classList.add('active');
+
+        // Only re-render cards that aren't already shown
+        // (to avoid wiping inputs the operator is typing in)
+        pending.forEach(p => {
+            const existingCard = document.getElementById(`bmi-card-${p.rfid}`);
+            if (!existingCard) {
+                const card = document.createElement('div');
+                card.className = 'bmi-pending-card';
+                card.id = `bmi-card-${p.rfid}`;
+                card.innerHTML = `
+                    <h3>👤 ${p.name}</h3>
+                    <div class="meta">
+                        📏 Height: <strong>${p.height} cm</strong>
+                        &nbsp;|&nbsp; Scanned at ${p.timestamp.split(' ')[1]}
+                    </div>
+                    <div class="weight-input-row">
+                        <input
+                            type="number"
+                            class="weight-input"
+                            id="weight-${p.rfid}"
+                            placeholder="Weight (kg)"
+                            min="20" max="300" step="0.1"
+                        >
+                        <button class="calc-btn" id="btn-${p.rfid}"
+                            onclick="submitWeight('${p.rfid}', '${p.name}')">
+                            Calculate BMI
+                        </button>
+                    </div>
+                    <div class="bmi-result-box" id="result-${p.rfid}"></div>
+                `;
+                listEl.appendChild(card);
             }
         });
-    </script>
+
+        // Remove cards whose rfid no longer appears in pending
+        const pendingRFIDs = pending.map(p => p.rfid);
+        listEl.querySelectorAll('.bmi-pending-card').forEach(card => {
+            const rfid = card.id.replace('bmi-card-', '');
+            if (!pendingRFIDs.includes(rfid)) card.remove();
+        });
+
+        if (listEl.children.length === 0) alertEl.classList.remove('active');
+    }
+
+    // ── SUBMIT WEIGHT ─────────────────────────────────────────
+    async function submitWeight(rfid, name) {
+        const weightInput = document.getElementById(`weight-${rfid}`);
+        const resultBox   = document.getElementById(`result-${rfid}`);
+        const btn         = document.getElementById(`btn-${rfid}`);
+
+        const weight = parseFloat(weightInput.value);
+
+        // Client-side validation
+        if (!weightInput.value || isNaN(weight) || weight < 20 || weight > 300) {
+            weightInput.classList.add('error');
+            weightInput.placeholder = 'Enter 20–300 kg';
+            weightInput.focus();
+            setTimeout(() => {
+                weightInput.classList.remove('error');
+                weightInput.placeholder = 'Weight (kg)';
+            }, 2000);
+            return;
+        }
+
+        // Disable button while submitting
+        btn.disabled = true;
+        btn.textContent = 'Calculating...';
+
+        try {
+            const res = await fetch('/api/submit_weight', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rfid: rfid, weight: weight })
+            });
+
+            const data = await res.json();
+            console.log('submit_weight response:', data);
+
+            resultBox.classList.remove('normal','underweight','overweight','obese','error-box');
+
+            if (data.status === 'OK') {
+                const catMap = {
+                    'Normal':      'normal',
+                    'Underweight': 'underweight',
+                    'Overweight':  'overweight',
+                    'Obese':       'obese'
+                };
+                const cls = catMap[data.bmi_category] || 'normal';
+                resultBox.className = `bmi-result-box ${cls} show`;
+                resultBox.innerHTML = `
+                    ✅ BMI: <strong>${data.bmi} kg/m²</strong> — ${data.bmi_category}<br>
+                    <small style="opacity:0.8">Height: ${data.height} cm &nbsp;|&nbsp; Weight: ${data.weight} kg</small>
+                `;
+
+                // Remove the card after 4 seconds and refresh
+                setTimeout(() => {
+                    const card = document.getElementById(`bmi-card-${rfid}`);
+                    if (card) card.remove();
+                    const listEl = document.getElementById('bmiPendingList');
+                    if (listEl.children.length === 0)
+                        document.getElementById('bmiAlert').classList.remove('active');
+                    loadData();
+                }, 4000);
+
+            } else {
+                resultBox.className = 'bmi-result-box error-box show';
+                resultBox.textContent = '❌ ' + (data.message || 'Unknown error');
+                btn.disabled = false;
+                btn.textContent = 'Calculate BMI';
+            }
+
+        } catch (err) {
+            console.error('submitWeight error:', err);
+            resultBox.className = 'bmi-result-box error-box show';
+            resultBox.textContent = '❌ Network error — is the server running?';
+            btn.disabled = false;
+            btn.textContent = 'Calculate BMI';
+        }
+    }
+
+    // ── INIT ──────────────────────────────────────────────────
+    loadData();
+    autoRefreshInterval = setInterval(loadData, 5000);
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clearInterval(autoRefreshInterval);
+        } else {
+            loadData();
+            autoRefreshInterval = setInterval(loadData, 5000);
+        }
+    });
+</script>
 </body>
 </html>
