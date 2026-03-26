@@ -5,8 +5,13 @@ Stores attendance data and serves dashboard
 """
 
 from flask import Flask, request, jsonify, render_template
-import cv2
-import face_recognition
+try:
+    import cv2
+    import face_recognition
+    FACE_RECOGNITION_AVAILABLE = True
+except ImportError:
+    FACE_RECOGNITION_AVAILABLE = False
+    print("⚠ face_recognition/cv2 not available. Face verification disabled (cloud mode).")
 import numpy as np
 import json
 import os
@@ -90,6 +95,8 @@ def save_attendance():
 
 def capture_face():
     """Capture face from webcam and return face encoding"""
+    if not FACE_RECOGNITION_AVAILABLE:
+        return None, "Face recognition not available (cloud mode). Use local server for face verification."
     print("📷 Opening camera...")
     camera = cv2.VideoCapture(0)
 
